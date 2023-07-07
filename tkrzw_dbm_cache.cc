@@ -568,6 +568,9 @@ void CacheSlot::RemoveLRU() {
   while (ptr != nullptr) {
     rec.Deserialize(ptr);
     if (ptr == first_) {
+      if (dbm_->update_logger_ != nullptr) {
+        dbm_->update_logger_->WriteRemove(key);
+      }
       xfree(ptr);
       if (parent == nullptr) {
         buckets_[bucket_index] = rec.child;
